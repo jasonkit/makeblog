@@ -4,6 +4,7 @@ var Handlebars = require("Handlebars");
 var getopt = require("node-getopt");
 var fs = require("fs");
 var path = require("path");
+var highlight = require("highlight.js");
 
 var options = getopt.create([
         ["i", "input=ARG",      "input markdown file."],
@@ -31,6 +32,11 @@ Handlebars.registerHelper("formatDate", function(date, lang){
 });
 
 var md = new MarkedMetaData(options.input);
+md.setOptions({
+    highlight: function (code) {
+        return highlight.highlight("c",code).value;
+    }
+});
 md.defineTokens("---", "---");
 
 try {

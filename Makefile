@@ -32,7 +32,7 @@ $(dest)/pages/%/index.html: $(src)/pages/%.md $(template_sources)
 
 $(dest)/css/%.css: $(src)/css/%.scss $(wildcard $(src)/css/_*.scss)
 	@echo Building $<
-	@scss -E UTF-8 --no-cache $< > $@
+	@scss -E UTF-8 --no-cache --style compressed $< > $@
 
 clean:
 	@read -p "Are you sure [y]?" confirm; test "$$confirm" = "y" && rm -rf $(dest)/* || echo "Clean action cancelled."
