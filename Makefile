@@ -1,5 +1,5 @@
 src  = ../src
-dest = ../
+dest = ../blog
 
 -include ./makeblog.mk
 
