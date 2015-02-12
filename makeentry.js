@@ -43,6 +43,20 @@ try {
 
 context.short_title = path.basename(options.input, ".md");
 
+if (context.template === undefined) {
+    switch (path.basename(path.dirname(options.input))) {
+        case "pages":
+            context.template = "page.hbt";
+            break;
+        case "posts":
+            context.template = "post.hbt";
+            break;
+        default:
+            console.log("template not found for", options.input);
+            process.exit(-1);
+    }
+}
+
 var template = Handlebars.compile(fs.readFileSync([__dirname,template_path,context.template].join(path.sep)).toString());
 var html = template(context);
 try {
