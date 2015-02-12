@@ -2,7 +2,7 @@ src  = ../src
 dest = ../blog
 template = ../templates
 
-#-include ./makeblog.mk
+-include ../makeblog.mk
 
 vpath %.scss ${src}/css
 
