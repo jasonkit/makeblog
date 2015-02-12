@@ -1,5 +1,7 @@
-src  = ./src
-dest = ../blog
+src  = ../src
+dest = ../
+
+-include ./makeblog.mk
 
 vpath %.scss ${src}/css
 
