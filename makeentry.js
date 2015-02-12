@@ -5,8 +5,16 @@ var getopt = require("node-getopt");
 var fs = require("fs");
 var path = require("path");
 
+var options = getopt.create([
+        ["i", "input=ARG",      "input markdown file."],
+        ["o", "output=ARG",     "output html file."],
+        ["t", "template=ARG",   "template directory."],
+        ["h", "help",           "display this help."]
+        ]).bindHelp().parseSystem().options;
+
 // setup Handlebars
-var template_path = "templates";
+var template_path = options.template;
+
 Handlebars.registerPartial("header", fs.readFileSync([__dirname,template_path,"partials","header.hbt"].join(path.sep)).toString());
 Handlebars.registerPartial("footer", fs.readFileSync([__dirname,template_path,"partials","footer.hbt"].join(path.sep)).toString());
 Handlebars.registerHelper("formatDate", function(date, lang){
@@ -21,12 +29,6 @@ Handlebars.registerHelper("formatDate", function(date, lang){
         return month[date.getMonth()]+" "+date.getDate()+", "+date.getFullYear();        
     }
 });
-
-var options = getopt.create([
-        ["i", "input=ARG",  "input markdown file."],
-        ["o", "output=ARG", "output html file."],
-        ["h", "help",       "display this help."]
-        ]).bindHelp().parseSystem().options;
 
 var md = new MarkedMetaData(options.input);
 md.defineTokens("---", "---");
@@ -44,7 +46,9 @@ context.short_title = path.basename(options.input, ".md");
 var template = Handlebars.compile(fs.readFileSync([__dirname,template_path,context.template].join(path.sep)).toString());
 var html = template(context);
 try {
-    fs.mkdirSync(path.dirname(options.output));
+    if (!fs.existsSync(path.dirname(options.output))) {
+        fs.mkdirSync(path.dirname(options.output));
+    }
     fs.writeFileSync(options.output, html);
 }catch(err) {
     console.log("Cannot write output to", options.output);
