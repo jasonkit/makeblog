@@ -6,7 +6,8 @@
   "dependencies": {
     "handlebars": "^3.0.0",
     "highlight.js": "^8.4.0",
-    "marked-metadata-with-options": "^0.0.1",
+    "markdown-it": "^3.0.6",
+    "markdown-it-footnote": "^0.1.0",
     "node-getopt": "^0.2.3"
   }
 }

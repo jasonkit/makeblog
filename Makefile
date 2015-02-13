@@ -37,7 +37,7 @@ $(dest)/css/%.css: $(src)/css/%.scss $(wildcard $(src)/css/_*.scss)
 	@scss -E UTF-8 --no-cache --style compressed $< > $@
 
 clean:
-	@read -p "Are you sure [y]?" confirm; test "$$confirm" = "y" && rm -rf $(dest)/* || echo "Clean action cancelled."
+	@read -p "Are you sure wipe $(dest) [y]?" confirm; test "$$confirm" = "y" && rm -rf $(dest)/* || echo "Clean action cancelled."
 
 watch:
 	@test -e $(watcher_pid) && echo "watcher is running already." || fswatch-run-bash $(src) make > /dev/null 2>&1 & echo `expr $$! + 4` > $(watcher_pid); echo "Watching $(src)..."
