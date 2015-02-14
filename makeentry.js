@@ -19,9 +19,11 @@ var template = require([options.template,"template.js"].join(path.sep))(options,
 template.init();
 
 // markdown config
+var has_tex = false;
 var mdIt = new MarkdownIt({
     highlight: function (str, lang) {
         if (lang === "latex"){
+            has_tex = true;
             return str;
         }
 
@@ -51,7 +53,8 @@ try {
     process.exit(1);
 }
 
-latex(context.contents, '<pre><code class="language-latex">', '</code></pre>', function(content) {
+
+var applyTemplate = function(content) {
     context.contents = content;
 
     try {
@@ -63,4 +66,10 @@ latex(context.contents, '<pre><code class="language-latex">', '</code></pre>', f
         console.log("Cannot write output to", options.output);
         process.exit(2);
     }
-});
+}
+
+if (!has_tex) {
+    applyTemplate(context.contents);
+} else {
+    latex(context.contents, '<pre><code class="language-latex">', '</code></pre>', applyTemplate);
+}
