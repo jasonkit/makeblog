@@ -5,6 +5,7 @@ var path = require("path");
 var hljs = require("highlight.js");
 var MarkdownIt   = require("markdown-it");
 var MarkdownMetaData = require("./lib/markdown-metadata.js");
+var latex = require("./lib/latex.js");
 
 var options = getopt.create([
         ["i", "input=ARG",      "input markdown file."],
@@ -20,6 +21,10 @@ template.init();
 // markdown config
 var mdIt = new MarkdownIt({
     highlight: function (str, lang) {
+        if (lang === "latex"){
+            return str;
+        }
+
         if (lang && hljs.getLanguage(lang)) {
             try {
                 return hljs.highlight(lang, str).value;
@@ -46,12 +51,16 @@ try {
     process.exit(1);
 }
 
-try {
-    if (!fs.existsSync(path.dirname(options.output))) {
-        fs.mkdirSync(path.dirname(options.output));
+latex(context.contents, '<pre><code class="language-latex">', '</code></pre>', function(content) {
+    context.contents = content;
+
+    try {
+        if (!fs.existsSync(path.dirname(options.output))) {
+            fs.mkdirSync(path.dirname(options.output));
+        }
+        fs.writeFileSync(options.output, template.apply(context));
+    } catch(err) {
+        console.log("Cannot write output to", options.output);
+        process.exit(2);
     }
-    fs.writeFileSync(options.output, template.apply(context));
-} catch(err) {
-    console.log("Cannot write output to", options.output);
-    process.exit(2);
-}
+});
