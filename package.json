@@ -10,6 +10,8 @@
     "latex": "0.0.1",
     "markdown-it": "^3.0.6",
     "markdown-it-footnote": "^0.1.0",
-    "node-getopt": "^0.2.3"
+    "node-getopt": "^0.2.3",
+    "watch": "^0.14.0",
+    "ws": "^0.7.1"
   }
 }

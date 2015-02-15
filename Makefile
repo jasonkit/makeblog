@@ -47,9 +47,8 @@ clean:
 	@read -p "Are you sure wipe $(dest) [y]?" confirm; test "$$confirm" = "y" && rm -rf $(dest)/* || echo "Clean action cancelled."
 
 watch:
-	@test -e $(watcher_pid) && echo "watcher is running already." || fswatch-run-bash $(src) $(template) make > /dev/null 2>&1 & echo `expr $$! + 4` > $(watcher_pid); echo "Watching $(src)..."
+	@node ./makeblog-watcher.js -s $(src) -t $(template) -p 56789 > /dev/null 2>&1 &
 
 unwatch:
-	-@kill $(shell cat $(watcher_pid)) > /dev/null
-	-@rm $(watcher_pid) > /dev/null
-	@echo "Stop watching $(src)."
+	@node ./makeblog-watcher.js -k
+
